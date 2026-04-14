@@ -1,0 +1,16 @@
+import "axios";
+import "electron";
+import "electron-log";
+import "./index-BgocVd3T.js";
+import "fs/promises";
+import "mime";
+import "node:child_process";
+import "node:crypto";
+import "node:fs";
+import "node:http";
+import "node:os";
+import "node:path";
+import "node:url";
+import "tree-kill";
+import "unzipper";
+//# sourceMappingURL=index.js.map
