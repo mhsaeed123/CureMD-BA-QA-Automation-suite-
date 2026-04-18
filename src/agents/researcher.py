@@ -1,11 +1,11 @@
 """
-Researcher Agent - Web Research and Data Gathering
-===================================================
-Inspired by: OpenManus, MiniPerplx, Storm, deep-research
+Researcher Agent - Web Research & Q&A
+====================================
+Inspired by: storm, deep-research, dananswer
 Features:
-- Multi-source web search
-- Content extraction and summarization
-- Fact verification
+- Web search
+- Content extraction
+- Multi-source synthesis
 - Citation tracking
 """
 
@@ -17,21 +17,22 @@ logger = get_logger("agents.researcher")
 
 class ResearcherAgent(Agent):
     """
-    Agent specialized in web research.
-    Inspired by: MiniPerplx, Storm, deep-research
+    Agent specialized in research and information gathering.
+    Inspired by: storm, deep-research, dananswer
     """
     
     def __init__(self, config: AgentConfig):
         super().__init__(config)
-        self.search_results: List[Dict] = []
+        self.sources: List[Dict] = []
         self._setup_tools()
     
     def _setup_tools(self) -> None:
         """Setup research tools."""
-        self.register_tool("search_web", self._search_web, {
+        self.register_tool("web_search", self._web_search, {
             "description": "Search the web for information",
             "parameters": {"type": "object", "properties": {
-                "query": {"type": "string"}
+                "query": {"type": "string"},
+                "num_results": {"type": "integer", "default": 10}
             }, "required": ["query"]}
         })
         
@@ -46,41 +47,42 @@ class ResearcherAgent(Agent):
             "description": "Summarize text content",
             "parameters": {"type": "object", "properties": {
                 "text": {"type": "string"},
-                "max_length": {"type": "integer"}
+                "max_length": {"type": "integer", "default": 500}
             }, "required": ["text"]}
         })
     
     @trace()
-    async def _search_web(self, query: str) -> List[Dict]:
-        """Search the web (placeholder - integrate with search API)."""
-        # In production, integrate with SerpAPI, DuckDuckGo, etc.
-        logger.info(f"Searching web for: {query}")
+    def _web_search(self, query: str, num_results: int = 10) -> List[Dict]:
+        """Search the web for information."""
+        # Placeholder - integrate with SerpAPI, DuckDuckGo, etc.
         results = [
-            {"title": f"Result for {query}", "url": "https://example.com", "snippet": "Sample result"}
+            {
+                "title": f"Result for: {query}",
+                "url": f"https://example.com/search?q={query}",
+                "snippet": f"This is a search result for {query}..."
+            }
         ]
-        self.search_results.extend(results)
+        self.sources.extend(results)
         return results
     
     @trace()
-    async def _extract_content(self, url: str) -> str:
+    def _extract_content(self, url: str) -> str:
         """Extract content from URL."""
-        # In production, use crawl4ai or similar
-        logger.info(f"Extracting content from: {url}")
-        return f"Extracted content from {url}"
+        # Placeholder - integrate with crawl4ai or BeautifulSoup
+        return f"Extracted content from {url}..."
     
     @trace()
-    async def _summarize(self, text: str, max_length: int = 500) -> str:
+    def _summarize(self, text: str, max_length: int = 500) -> str:
         """Summarize text."""
         if len(text) <= max_length:
             return text
         return text[:max_length] + "..."
-    
+
     async def think(self) -> str:
-        """Analyze research needs."""
-        if not self.messages:
-            return "No research task"
-        return "search_and_extract"
+        return "research_and_synthesize"
     
     async def act(self) -> Any:
-        """Execute research task."""
-        return {"status": "research_complete", "results": self.search_results}
+        return {"status": "research_complete", "sources": len(self.sources)}
+    
+    def _is_done(self, result: Any) -> bool:
+        return "complete" in str(result).lower()
