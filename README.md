@@ -1,180 +1,161 @@
-# 🚀 CureMD BA QA Automation Suite - AI SUPER APP
+# OneAgent — Self-Building Agentic Platform for Healthcare IT
 
-## THE BILLION-DOLLAR SUPER APP
+> Merged from CureMD BA/QA Automation Suite + OneAgent Architecture  
+> **Version 2.0.0** | Author: Muhammad Haris Saeed
 
-> **ONE APP TO RULE THEM ALL** - Combines ALL features from 30+ open-source AI agent frameworks into a single, unified platform.
+## What Is This
 
----
+One unified agentic platform that replaces 34+ scattered forks with a single runtime. Built for Healthcare IT BA/QA automation (FHIR, LEAP, CureMD), but extensible to any domain via self-authoring modules.
 
-## 📦 MERGED FEATURES (33 Modules)
+**Two ways to use it:**
+1. **Standalone local app** — `python oneagent.py` (no server needed)
+2. **Agent platform** — `python oneagent.py serve` (FastAPI + Goose/OpenClaw/Hermes configs)
 
-### 🤖 AGENTS
-| Module | Source | Features |
-|--------|--------|----------|
-| `multi_agent_system` | MetaGPT, ChatDev, AutoGPT, BabyAGI | Role-based agents, task decomposition |
-| `manual_agent` | OpenManus | General-purpose agent framework |
-| `super_agent` | SuperAGI | Task management, resource optimization |
-| `event_agent` | OpenHands | Event streaming, trajectory tracking |
-| `mega_agent` | MetaGPT (full) | Complete agent with all capabilities |
-| `autonomous_agent` | AutoGPT | Autonomous goal pursuit |
-| `ai_coding_agent` | devika | AI-powered coding assistant |
-| `research_writer` | storm | Research report generation |
-| `automation_claw` | openclaw | Full automation framework |
+## Quick Start
 
-### 💻 CODE EDITING
-| Module | Source | Features |
-|--------|--------|----------|
-| `search_replace_editor` | aider | SEARCH/REPLACE blocks |
-| `fuzzy_code_patch` | sweep | Fuzzy patching, syntax guardrails |
-| `code_autocomplete` | continue, cline | Intelligent code completion |
-| `code_planning` | plandex | Project-wide code planning |
-| `prompt_engineering` | gpt-engineer | Prompt-based code generation |
-
-### 🌐 BROWSER AUTOMATION
-| Module | Source | Features |
-|--------|--------|----------|
-| `browser_automation_core` | browser-use, LaVague | Vision-based web automation |
-| `browser_steel` | steel-browser | Full browser control |
-| `simple_browser` | stagehand | Simple, intuitive API |
-| `workflow_automation` | skyvern | Workflow-based automation |
-
-### 🔍 RESEARCH & KNOWLEDGE
-| Module | Source | Features |
-|--------|--------|----------|
-| `web_research` | deep-research | Automated web research |
-| `document_qa` | dananswer | Document Q&A system |
-| `knowledge_base` | anything-llm | RAG knowledge management |
-| `personal_knowledge` | khoj | Personal knowledge assistant |
-
-### ⚡ EXECUTION
-| Module | Source | Features |
-|--------|--------|----------|
-| `code_executor` | open-interpreter | Sandboxed code execution |
-| `ai_web_scraper` | crawl4ai | AI-powered web scraping |
-
-### 🔗 ORCHESTRATION
-| Module | Source | Features |
-|--------|--------|----------|
-| `llm_orchestration` | LangGraph, LangChain | State management, chains, tools |
-
-### 👥 COLLABORATION
-| Module | Source | Features |
-|--------|--------|----------|
-| `collaborative_dev` | ChatDev | Multi-role collaborative development |
-
----
-
-## 🚀 QUICK START
-
-### Option 1: Use run.bat
-```batch
-run.bat
-```
-
-### Option 2: Manual
 ```bash
 # Install dependencies
-pip install -r requirements.txt
-playwright install chromium
+pip install -e .
 
 # Interactive mode
-python cli.py
+python oneagent.py
 
-# Single task
-python cli.py "Build a REST API"
-
-# API Server
-python cli.py --server
+# CLI commands
+python oneagent.py ask "What is FHIR R4?"
+python oneagent.py run "Audit all FHIR endpoints"
+python oneagent.py browse "https://hapi.fhir.org"
+python oneagent.py research "ONC HTI-2 final rule"
+python oneagent.py code "Write a FHIR Patient validator"
+python oneagent.py budget          # Show token spend
+python oneagent.py models          # List available LLM models
+python oneagent.py tools           # List registered tools
+python oneagent.py status          # System health check
+python oneagent.py serve           # Start API server
 ```
 
----
-
-## 📁 PROJECT STRUCTURE
+## Architecture
 
 ```
 CureMD-BA-QA-Automation-suite-/
-├── src/
-│   ├── super_app.py              # Main Super App class
-│   ├── agents/                   # Core agents
-│   │   ├── base.py              # ReAct agent base
-│   │   ├── supervisor.py        # Task orchestrator
-│   │   ├── coder.py             # Code editor
-│   │   ├── researcher.py        # Research agent
-│   │   └── browser_agent.py     # Browser automation
-│   ├── orchestration/           # Task execution
-│   │   ├── orchestrator.py      # LangGraph-inspired
-│   │   ├── scheduler.py         # Celery/async
-│   │   └── events.py            # Event streaming
-│   ├── browser/                 # Browser automation
-│   │   ├── controller.py        # Playwright + CDP
-│   │   └── vision.py            # Vision engine
-│   ├── memory/                  # Memory systems
-│   ├── providers/               # LLM providers
-│   ├── tools/                   # MCP tools
-│   ├── logging/                 # Structured logging
-│   ├── src_modules/             # ★ 33 MERGED FEATURE MODULES
-│   │   ├── multi_agent_system/  # MetaGPT-style
-│   │   ├── search_replace_editor/# Aider-style
-│   │   ├── browser_automation_core/# browser-use + LaVague
-│   │   ├── llm_orchestration/    # LangGraph + LangChain
-│   │   └── ... (29 more)
-│   └── utils/
-├── backend/                     # FastAPI backend
-├── frontend/                    # React frontend
-├── tests/                      # Unit + E2E tests
-├── cli.py                       # CLI launcher
-├── run.bat                      # ★ Quick launcher
-├── requirements.txt
-└── README.md
+├── oneagent.py                # UNIFIED CLI ENTRY POINT
+├── src/                       # Core runtime
+│   ├── llm_runtime/           # LLM router + cache + budget (OneAgent)
+│   ├── providers/             # OpenAI, Anthropic, Ollama, Gemini
+│   ├── agents/                # Agent loop + base/supervisor/coder/browser/qa/researcher
+│   ├── tools/                 # Tool registry + MCP server/client
+│   ├── memory/                # Buffer + store + vector + memory_v2
+│   ├── skills/                # Skill packs + loader
+│   ├── orchestration/         # Orchestrator + events + scheduler
+│   ├── meta/                  # Self-extension engine (OneAgent)
+│   ├── rag/                   # ChromaDB RAG (OneAgent)
+│   ├── profile/               # User profile (OneAgent)
+│   ├── auth/                  # Keycloak auth (OneAgent)
+│   ├── config/                # SuperAppConfig + OneAgent config
+│   ├── db/                    # SQLModel + database
+│   ├── browser/               # Playwright browser automation
+│   ├── coder/                 # Code generation + test builder
+│   ├── guardrails/            # Code safety guardrails
+│   └── src_modules/           # 46 merged open-source frameworks
+├── modules/                   # Plugin modules (limbs)
+│   ├── fhir/                  # FHIR BA/QA tools
+│   ├── leap/                  # LEAP analytics
+│   ├── research/              # Deep research
+│   ├── content/               # Blog/SEO pipeline
+│   ├── work_ops/              # Outlook/Teams/SharePoint
+│   ├── files/                 # File organization
+│   ├── coding/                # Code generation agent
+│   ├── web_discovery/         # Web discovery + browser agent
+│   └── hello_world/           # Test module
+├── api/                       # FastAPI server (OneAgent)
+├── backend/                   # Original backend (Keycloak routes)
+├── agents/                    # Recipes, connectors, cron jobs
+│   ├── recipes.yaml           # Multi-step agent workflows
+│   └── connectors.yaml        # External service integrations
+├── .goose/session.yaml        # Goose agent platform config
+├── .openclaw/config.yaml      # OpenClaw agent config
+├── .hermes/config.yaml        # Hermes multi-model routing config
+├── tests/                     # Test suite
+├── _legacy/                   # Archived projects (not in git)
+└── pyproject.toml             # Build config (oneagent v2.0.0)
 ```
 
----
+## LLM Router — Token Efficiency
 
-## 💡 USAGE EXAMPLES
+Every LLM call goes through `src/llm_runtime/router.py`:
+- **Ranking-based model selection** — edit `src/llm_runtime/ranking.yaml`
+- **Task classes** — classify, extract, reason, code, long_context, vision, chat
+- **Caching** — identical prompts return cached responses ($0)
+- **Budget enforcement** — daily $ cap, per-task limits
+- **Multi-provider** — OpenAI, Anthropic, Gemini, Ollama
 
-### Multi-Agent Task
-```python
-from src import SuperApp
-app = SuperApp()
-result = await app.run("Build a complete web app with auth")
+```yaml
+# ranking.yaml
+default: gpt-4o-mini
+task_classes:
+  classify: [gemini-2.0-flash, gpt-4o-mini, claude-3-5-haiku]
+  code: [claude-sonnet-4, gpt-4o, deepseek-coder]
+  reason: [claude-sonnet-4, gpt-4o, gemini-2.0-flash]
 ```
 
-### Browser Automation
-```python
-result = await app.browse("https://github.com", actions=[
-    {"type": "click", "selector": "#signup"},
-    {"type": "type", "selector": "#email", "text": "user@example.com"}
-])
+## Agent Platform Integrations
+
+### Goose
+```bash
+# Config: .goose/session.yaml
+# Skills, MCP servers, cron jobs all defined there
 ```
 
-### Code Editing
+### OpenClaw
+```bash
+# Config: .openclaw/config.yaml
+# Modules, agents, auto-commit settings
+```
+
+### Hermes
+```bash
+# Config: .hermes/config.yaml
+# Multi-model routing per task class
+```
+
+## Self-Extension (Meta Layer)
+
+The app can write its own modules:
 ```python
-coder.create_search_replace(
-    path="src/main.py",
-    search="def old(): pass",
-    replace="def new(): return 'Hello'"
+from src.meta.module_author import ModuleAuthor
+author = ModuleAuthor()
+result = await author.generate_module(
+    "Create a FHIR bundle differ that compares two bundles"
 )
 ```
 
----
+Every self-authored module is:
+- Tested automatically in an isolated sandbox
+- Registered with provenance metadata
+- Reviewable before going live
 
-## 📊 STATS
+## Legacy Projects Archived
 
-- **33** Feature modules
-- **30+** Source frameworks
-- **20,000+** Python files merged
-- **∞** Possibilities
+The following projects have been consolidated into `_legacy/`:
+- OmniMediaAgency (blog/content platform)
+- Udemy-Autonomous-System (Udemy course scraper)
+- autonomous-app-factory (app scaffolding)
+- jules-controller (task controller)
+- CureMD-Developer-Portal (Python version)
+- CureMD-FHIR-API-dotnet (.NET FHIR facade)
 
----
+## Environment Setup
 
-## 🤝 CONTRIBUTING
+```bash
+cp .env.example .env
+# Edit .env with your API keys
+```
 
-Built for the AI automation revolution.
+Required keys (at least one):
+- `OPENAI_API_KEY` — GPT-4o, GPT-4o-mini
+- `ANTHROPIC_API_KEY` — Claude Sonnet/Opus/Haiku
+- `GOOGLE_API_KEY` — Gemini 2.0 Flash
+- Optional: `OLLAMA_HOST` for local LLMs
 
-## 📄 LICENSE
+## License
 
 MIT
-
----
-
-**ONE APP TO RULE THEM ALL**

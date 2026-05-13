@@ -1,16 +1,23 @@
 """
-Agents Module - Core AI Agent Implementations
-==============================================
-Combines features from: OpenManus, MetaGPT, AutoGPT, BabyAGI, OpenHands, Roo-Code
+CureMD BA QA Automation Suite - Agents Module
+=============================================
+Base agent classes and specialized agents for QA automation.
+
+Author: CureMD BA QA Team
+Version: 1.0.0
 """
 
-from .base import Agent, AgentConfig, AgentState
-from .supervisor import SupervisorAgent
-from .coder import CoderAgent
-from .researcher import ResearcherAgent
-from .browser_agent import BrowserAgent
+from .base_agent import BaseAgent, AgentStatus
+from .qa_agent import QAAgent, TestResult
+from .automation_agent import AutomationAgent, WorkflowStep
 
 __all__ = [
-    "Agent", "AgentConfig", "AgentState",
-    "SupervisorAgent", "CoderAgent", "ResearcherAgent", "BrowserAgent"
+    'BaseAgent',
+    'AgentStatus',
+    'QAAgent',
+    'TestResult',
+    'AutomationAgent',
+    'WorkflowStep',
 ]
+
+__version__ = '1.0.0'

@@ -1,0 +1,90 @@
+# OneAgent Recipes for Goose
+# These define reusable multi-step workflows
+
+recipes:
+  - name: fhir-full-audit
+    description: "Complete FHIR endpoint audit with report generation"
+    steps:
+      - name: discover
+        agent: fhir
+        task: "Discover all FHIR endpoints and resources"
+      - name: validate  
+        agent: fhir
+        task: "Validate resource consistency across endpoints"
+      - name: cost-analysis
+        agent: fhir
+        task: "Analyze cost implications of inconsistencies"
+      - name: report
+        agent: content
+        task: "Generate comprehensive audit report"
+
+  - name: leap-weekly-review
+    description: "Weekly LEAP analytics review and digest"
+    steps:
+      - name: collect
+        agent: leap
+        task: "Collect weekly LEAP metrics"
+      - name: analyze
+        agent: leap
+        task: "Analyze trends and anomalies"
+      - name: summarize
+        agent: content
+        task: "Create executive summary"
+
+  - name: research-and-blog
+    description: "Research a topic and write a blog post"
+    steps:
+      - name: research
+        agent: research
+        task: "Deep research on the given topic"
+      - name: outline
+        agent: content
+        task: "Create blog post outline from research"
+      - name: write
+        agent: content
+        task: "Write full blog post"
+      - name: seo
+        agent: content
+        task: "Optimize for SEO"
+
+  - name: code-review-fix
+    description: "Review code and fix issues"
+    steps:
+      - name: review
+        agent: coding
+        task: "Review the code for issues"
+      - name: test
+        agent: coding
+        task: "Generate tests for the code"
+      - name: fix
+        agent: coding
+        task: "Fix all identified issues"
+
+cron_jobs:
+  - name: fhir-weekly-audit
+    recipe: fhir-full-audit
+    schedule: "0 8 * * 1"  # Monday 8am
+    enabled: true
+
+  - name: leap-weekly-review  
+    recipe: leap-weekly-review
+    schedule: "0 9 * * 1"  # Monday 9am
+    enabled: true
+
+  - name: daily-research-brief
+    recipe: research-and-blog
+    schedule: "0 7 * * 1-5"  # Weekdays 7am
+    params:
+      topic: "latest healthcare IT and FHIR updates"
+    enabled: false  # Enable when ready
+
+scheduled_agents:
+  - name: inbox-triage
+    schedule: "*/30 * * * 1-5"  # Every 30 min on weekdays
+    task: "Check Outlook inbox and triage new FHIR tickets"
+    module: work_ops
+    
+  - name: file-organization
+    schedule: "0 18 * * 5"  # Friday 6pm
+    task: "Organize and archive week's files"
+    module: files

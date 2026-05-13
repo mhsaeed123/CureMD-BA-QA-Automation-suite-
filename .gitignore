@@ -37,26 +37,25 @@ htmlcov/
 # Node
 node_modules/
 
-# Build
-dist/
-build/
-
-# Workspace
+# Workspace & Data
 workspace/
+data/*.db
+cache/
 
 # Credentials
 *.env
 .env.local
-"*.tsx"  
-"*.jsx"  
-"frontend/"  
-"node_modules/" 
-"*.tsx"  
-"*.jsx"  
-"frontend/"  
-"*.tsx"  
-"*.jsx"  
-"frontend/"  
-"node_modules/"  
-"autonomous_agent/"  
-"superagi/"  
+.env
+
+# Legacy archives (too large for git)
+_legacy/
+
+# Database files
+*.db
+*.sqlite3
+
+# Agent workspace caches
+.antigravity/
+.claude/
+.goose/
+.openclaw-autoclaw/

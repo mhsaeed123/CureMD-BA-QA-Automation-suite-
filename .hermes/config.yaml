@@ -1,0 +1,56 @@
+# OneAgent Hermes Configuration
+version: "1.0"
+name: oneagent-hermes
+description: "OneAgent with Hermes multi-model routing"
+
+routing:
+  classify:
+    - gemini-2.0-flash
+    - gpt-4o-mini
+    - claude-3-5-haiku
+  extract:
+    - gpt-4o-mini
+    - gemini-2.0-flash
+  reason:
+    - claude-sonnet-4
+    - gpt-4o
+    - gemini-2.0-flash
+  code:
+    - claude-sonnet-4
+    - gpt-4o
+    - deepseek-coder
+  long_context:
+    - gemini-2.0-flash
+    - claude-sonnet-4
+  vision:
+    - gpt-4o
+    - gemini-2.0-flash
+  chat:
+    - gpt-4o-mini
+    - llama3.2
+    - gemini-2.0-flash
+
+budget:
+  daily_limit_usd: 5.0
+  per_task_limit_usd: 0.50
+  track_all: true
+
+cache:
+  enabled: true
+  backend: sqlite
+  path: "cache/llm_cache.db"
+  ttl_hours: 24
+
+modules:
+  fhir:
+    model_override: gpt-4o
+    budget_override: 2.0
+  leap:
+    model_override: gemini-2.0-flash
+    budget_override: 1.0
+  research:
+    model_override: claude-sonnet-4
+    budget_override: 3.0
+  coding:
+    model_override: claude-sonnet-4
+    budget_override: 2.0

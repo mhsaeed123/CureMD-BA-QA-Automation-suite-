@@ -1,0 +1,128 @@
+# OneAgent Connectors
+# External service integrations
+
+connectors:
+  # Microsoft 365
+  - name: outlook
+    type: microsoft-graph
+    description: "Outlook email and calendar integration"
+    auth: oauth2
+    scopes: ["Mail.Read", "Mail.Send", "Calendar.Read"]
+    config:
+      client_id: "${OUTLOOK_CLIENT_ID}"
+      client_secret: "${OUTLOOK_CLIENT_SECRET}"
+      tenant_id: "${OUTLOOK_TENANT_ID}"
+    tools:
+      - name: read_emails
+        description: "Read emails from inbox"
+      - name: send_email
+        description: "Send email"
+      - name: search_emails
+        description: "Search emails by query"
+      - name: get_calendar_events
+        description: "Get calendar events"
+
+  - name: teams
+    type: microsoft-graph
+    description: "Microsoft Teams integration"
+    auth: oauth2
+    config:
+      client_id: "${TEAMS_CLIENT_ID}"
+      client_secret: "${TEAMS_CLIENT_SECRET}"
+    tools:
+      - name: read_messages
+        description: "Read Teams messages"
+      - name: send_message
+        description: "Send Teams message"
+      - name: list_channels
+        description: "List available channels"
+
+  - name: sharepoint
+    type: microsoft-graph
+    description: "SharePoint document management"
+    auth: oauth2
+    config:
+      client_id: "${SHAREPOINT_CLIENT_ID}"
+      client_secret: "${SHAREPOINT_CLIENT_SECRET}"
+      site_id: "${SHAREPOINT_SITE_ID}"
+    tools:
+      - name: download_file
+        description: "Download file from SharePoint"
+      - name: upload_file
+        description: "Upload file to SharePoint"
+      - name: list_files
+        description: "List files in SharePoint folder"
+
+  # Healthcare IT
+  - name: hapi-fhir
+    type: fhir
+    description: "HAPI FHIR Server connection"
+    config:
+      base_url: "${FHIR_BASE_URL}"
+      auth: bearer
+      token: "${FHIR_AUTH_TOKEN}"
+    tools:
+      - name: query_resources
+        description: "Query FHIR resources"
+      - name: validate_resource
+        description: "Validate a FHIR resource"
+      - name: search_resources
+        description: "Search FHIR resources with parameters"
+
+  - name: curemd-portal
+    type: rest-api
+    description: "CureMD Developer Portal API"
+    config:
+      base_url: "${CUREMD_PORTAL_URL}"
+      api_key: "${CUREMD_API_KEY}"
+    tools:
+      - name: get_patient
+        description: "Get patient by ID"
+      - name: search_patients
+        description: "Search patients"
+      - name: get_encounters
+        description: "Get encounters for patient"
+
+  # Development
+  - name: github
+    type: github
+    description: "GitHub repository management"
+    auth: token
+    config:
+      token: "${GITHUB_TOKEN}"
+    tools:
+      - name: create_issue
+        description: "Create GitHub issue"
+      - name: create_pr
+        description: "Create pull request"
+      - name: list_commits
+        description: "List recent commits"
+
+  # AI Providers
+  - name: openai
+    type: llm-provider
+    provider: openai
+    config:
+      api_key: "${OPENAI_API_KEY}"
+      default_model: gpt-4o-mini
+      
+  - name: anthropic
+    type: llm-provider
+    provider: anthropic
+    config:
+      api_key: "${ANTHROPIC_API_KEY}"
+      default_model: claude-sonnet-4
+
+  - name: gemini
+    type: llm-provider
+    provider: gemini
+    config:
+      api_key: "${GOOGLE_API_KEY}"
+      default_model: gemini-2.0-flash
+
+  - name: ollama
+    type: llm-provider
+    provider: ollama
+    config:
+      host: "http://localhost:11434"
+      default_model: llama3.2

@@ -1,0 +1,51 @@
+# OneAgent OpenClaw Configuration  
+version: "1.0"
+name: oneagent-openclaw
+description: "OneAgent integrated with OpenClaw for autonomous coding"
+
+model:
+  provider: openai
+  name: gpt-4o
+  temperature: 0.7
+  
+workspace: "."
+auto_commit: true
+branch_prefix: "oneagent/"
+
+# OneAgent modules available as OpenClaw skills
+modules:
+  fhir:
+    description: "FHIR BA/QA automation tools"
+    tools: ["audit", "explore", "validate", "cost_analysis"]
+  leap:
+    description: "LEAP analytics and reporting"
+    tools: ["scaling", "rwt", "analytics", "support"]
+  research:
+    description: "Deep research and web discovery"
+    tools: ["search", "analyze", "synthesize", "cite"]
+  coding:
+    description: "Code generation and scaffolding"
+    tools: ["generate", "test", "refactor", "document"]
+  content:
+    description: "Blog/SEO/social pipeline"
+    tools: ["write", "optimize", "publish", "schedule"]
+  work_ops:
+    description: "Outlook/Teams/SharePoint automation"
+    tools: ["scrape", "download", "sync", "triage"]
+  files:
+    description: "File organization and analysis"
+    tools: ["organize", "analyze", "guard", "dedupe"]
+
+agents:
+  - name: fhir-auditor
+    module: fhir
+    schedule: "0 8 * * 1"
+    task: "Run weekly FHIR audit"
+  - name: leap-reporter  
+    module: leap
+    schedule: "0 9 * * *"
+    task: "Generate LEAP daily report"
+  - name: researcher
+    module: research
+    schedule: "0 10 * * 1-5"
+    task: "Research latest healthcare IT updates"

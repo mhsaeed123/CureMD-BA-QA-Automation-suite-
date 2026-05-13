@@ -1,0 +1,86 @@
+# =============================================================================
+# OneAgent LLM Ranking Configuration
+# =============================================================================
+# Edit this file to change model preference order per task class.
+# The router tries models top-to-bottom; first available wins.
+# Budget caps in core/config.py still apply on top of this.
+# =============================================================================
+
+# Pricing estimates (USD per 1M tokens) — used for budget tracking
+pricing:
+  gpt-4o-mini:           { input: 0.15,  output: 0.60  }
+  gpt-4o:                { input: 2.50,  output: 10.00 }
+  gpt-4.1-mini:          { input: 0.40,  output: 1.60  }
+  gpt-4.1:               { input: 2.00,  output: 8.00  }
+  o3-mini:               { input: 1.10,  output: 4.40  }
+  o3:                    { input: 10.00, output: 40.00 }
+  claude-sonnet-4-20250514:  { input: 3.00,  output: 15.00 }
+  claude-opus-4-20250115:    { input: 15.00, output: 75.00 }
+  claude-3-5-haiku-20241022: { input: 0.80,  output: 4.00  }
+  gemini-2.0-flash:       { input: 0.10,  output: 0.40  }
+  gemini-2.5-pro:         { input: 1.25,  output: 10.00 }
+  llama3.2:              { input: 0.00,  output: 0.00  }  # local/free
+
+# Default model to use when no task class is specified
+default: gpt-4o-mini
+
+# Task-class rankings — models listed in preference order
+# Router picks the first one whose API key is configured
+task_classes:
+  classify:
+    - gemini-2.0-flash
+    - gpt-4o-mini
+    - claude-3-5-haiku-20241022
+    - llama3.2
+
+  extract:
+    - gpt-4o-mini
+    - gemini-2.0-flash
+    - claude-3-5-haiku-20241022
+
+  summarize:
+    - gemini-2.0-flash
+    - gpt-4o-mini
+    - claude-3-5-haiku-20241022
+
+  code:
+    - claude-sonnet-4-20250514
+    - gpt-4o
+    - gemini-2.5-pro
+
+  reason:
+    - o3
+    - claude-opus-4-20250115
+    - o3-mini
+    - gemini-2.5-pro
+
+  long_context:
+    - gemini-2.5-pro
+    - claude-sonnet-4-20250514
+    - gpt-4o
+
+  vision:
+    - gpt-4o
+    - gemini-2.0-flash
+    - claude-sonnet-4-20250514
+
+  chat:
+    - gpt-4o-mini
+    - gemini-2.0-flash
+    - claude-3-5-haiku-20241022
+    - llama3.2
+
+# Model → provider mapping
+provider_map:
+  gpt-4o-mini:             openai
+  gpt-4o:                  openai
+  gpt-4.1-mini:            openai
+  gpt-4.1:                 openai
+  o3-mini:                 openai
+  o3:                      openai
+  claude-sonnet-4-20250514:    anthropic
+  claude-opus-4-20250115:      anthropic
+  claude-3-5-haiku-20241022:   anthropic
+  gemini-2.0-flash:        gemini
+  gemini-2.5-pro:          gemini
+  llama3.2:                ollama

@@ -1,16 +1,30 @@
 """
-Browser Module - Web Automation with Vision
-==========================================
-Inspired by: browser-use, LaVague, stagehand, skyvern, steel-browser
-Features:
-- Playwright + CDP integration
-- Vision-based element detection
-- Multi-step action planning
-- Loop detection
+CureMD BA QA Automation Suite - Browser Module
+================================================
+Browser automation utilities and element handling.
+
+Author: CureMD BA QA Team
+Version: 1.0.0
 """
 
-from .controller import BrowserController
-from .vision import VisionEngine
-from .playwright_integration import PlaywrightBrowser
+from .driver import BrowserDriver, DriverConfig, BrowserType
+from .elements import (
+    Element,
+    ElementFinder,
+    ElementWaiter,
+    ElementAction,
+    LocatorType
+)
 
-__all__ = ["BrowserController", "VisionEngine", "PlaywrightBrowser"]
+__all__ = [
+    'BrowserDriver',
+    'DriverConfig',
+    'BrowserType',
+    'Element',
+    'ElementFinder',
+    'ElementWaiter',
+    'ElementAction',
+    'LocatorType',
+]
+
+__version__ = '1.0.0'
