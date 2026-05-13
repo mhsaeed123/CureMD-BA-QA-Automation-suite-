@@ -265,8 +265,8 @@ class AgentFactory:
 
 
 # Register default agents
-from .qa_agent import QAAgent
-from .automation_agent import AutomationAgent
+from agents.qa_agent import QAAgent
+from agents.automation_agent import AutomationAgent
 
 AgentFactory.register("qa", QAAgent)
 AgentFactory.register("automation", AutomationAgent)

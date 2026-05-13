@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
-from ..logging import get_logger
+from app_logging import get_logger
 
 logger = get_logger("orchestration.scheduler")
 

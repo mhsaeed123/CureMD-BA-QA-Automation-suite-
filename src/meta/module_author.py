@@ -11,10 +11,10 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from ..llm.router import get_router
-from .sandbox import SandboxRunner
-from .test_runner import TestRunner
-from .registry import MetaRegistry
+from llm_runtime.router import get_router
+from meta.sandbox import SandboxRunner
+from meta.test_runner import TestRunner
+from meta.registry import MetaRegistry
 
 logger = logging.getLogger(__name__)
 

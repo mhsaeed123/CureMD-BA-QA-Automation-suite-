@@ -24,7 +24,7 @@ def _get_celery():
     if _celery is None:
         try:
             from celery import Celery
-            from ..config import get_settings
+            from config import get_settings
             settings = get_settings()
             _celery = Celery(
                 "oneagent",

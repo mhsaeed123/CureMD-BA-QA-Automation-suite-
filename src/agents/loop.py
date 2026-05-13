@@ -9,9 +9,28 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from ..llm.router import LLMRouter, get_router
-from .memory import AgentMemory
-from .tools import ToolDefinition, ToolRegistry, get_registry
+from llm_runtime.router import LLMRouter, get_router
+from tools.registry_v2 import ToolRegistry, ToolDefinition
+from memory.buffer import ConversationBuffer
+from memory.store import MemoryStore
+
+
+class AgentMemory:
+    """Combined short-term + long-term memory for the agent loop."""
+    def __init__(self, max_buffer: int = 50):
+        self.buffer = ConversationBuffer(max_messages=max_buffer)
+        self.store = MemoryStore()
+
+    def add_message(self, role: str, content: str):
+        self.buffer.add(role, content)
+
+    def get_context(self) -> List[Dict[str, str]]:
+        return self.buffer.get_messages()
+
+
+def get_registry():
+    """Get the global tool registry."""
+    return ToolRegistry
 
 logger = logging.getLogger(__name__)
 

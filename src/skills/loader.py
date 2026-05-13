@@ -10,7 +10,7 @@ from typing import Dict, Optional
 
 import yaml
 
-from .types import Skill, SkillPack
+from skills.types import Skill, SkillPack
 
 logger = logging.getLogger(__name__)
 

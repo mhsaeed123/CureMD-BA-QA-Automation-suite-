@@ -10,7 +10,7 @@ from typing import Dict, List, Optional
 
 import httpx
 
-from ..config import get_settings
+from config import get_config as get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +25,19 @@ class KeycloakService:
         client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
     ):
-        settings = get_settings().auth
-        self.base_url = base_url or settings.keycloak_base_url
-        self.realm = realm or settings.keycloak_realm
-        self.client_id = client_id or settings.keycloak_client_id
-        self.client_secret = client_secret or settings.keycloak_client_secret
+        import os
+        settings = get_settings()
+        auth_settings = getattr(settings, 'auth', None)
+        if auth_settings:
+            self.base_url = base_url or getattr(auth_settings, 'keycloak_base_url', None)
+            self.realm = realm or getattr(auth_settings, 'keycloak_realm', None)
+            self.client_id = client_id or getattr(auth_settings, 'keycloak_client_id', None)
+            self.client_secret = client_secret or getattr(auth_settings, 'keycloak_client_secret', None)
+        else:
+            self.base_url = base_url or os.environ.get('KEYCLOAK_BASE_URL')
+            self.realm = realm or os.environ.get('KEYCLOAK_REALM')
+            self.client_id = client_id or os.environ.get('KEYCLOAK_CLIENT_ID')
+            self.client_secret = client_secret or os.environ.get('KEYCLOAK_CLIENT_SECRET')
         self._token: Optional[str] = None
         self._token_expiry: float = 0
 

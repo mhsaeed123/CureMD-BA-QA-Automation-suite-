@@ -1,7 +1,7 @@
 """Anthropic Provider Implementation"""
 import os
 from typing import AsyncIterator
-from .base import AIProvider, AIResponse, AIProviderFactory
+from providers.base import AIProvider, AIResponse, AIProviderFactory
 
 class AnthropicProvider(AIProvider):
     """Anthropic Claude provider."""

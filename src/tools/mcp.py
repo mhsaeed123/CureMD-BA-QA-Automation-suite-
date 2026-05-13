@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 from functools import wraps
 
-from ..logging import get_logger
+from logging import getLogger as get_logger
 
 logger = get_logger("tools.mcp")
 

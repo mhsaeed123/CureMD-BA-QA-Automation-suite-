@@ -6,7 +6,7 @@ Supports Google Gemini models via the generative AI SDK.
 
 from typing import AsyncIterator, Dict, List, Optional
 
-from .base import AIProvider, AIResponse
+from providers.base import AIProvider, AIResponse
 
 
 class GeminiProvider(AIProvider):

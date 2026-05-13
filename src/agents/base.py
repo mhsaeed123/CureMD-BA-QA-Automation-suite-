@@ -18,7 +18,15 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Type
 
-from ..logging import get_logger, TaskLogger, trace
+from app_logging import get_logger
+# Compatibility shim for missing trace/TaskLogger
+def trace(*args, **kwargs):
+    def decorator(func): return func
+    if args and callable(args[0]): return args[0]
+    return decorator
+
+class TaskLogger: pass
+
 
 logger = get_logger("agents.base")
 

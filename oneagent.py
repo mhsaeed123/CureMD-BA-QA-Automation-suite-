@@ -87,12 +87,17 @@ def get_llm_router():
         from llm_runtime.router import get_router
         return get_router()
     except ImportError:
-        # Fallback: try loading from providers
+        # Try with src prefix
         try:
-            from providers import AIProviderFactory
-            return AIProviderFactory
+            from src.llm_runtime.router import get_router
+            return get_router()
         except ImportError:
-            return None
+            # Fallback: try loading from providers
+            try:
+                from providers import AIProviderFactory
+                return AIProviderFactory
+            except ImportError:
+                return None
 
 
 async def ask_llm(question: str, task_class: str = "chat", model: str = None, use_cache: bool = True):
@@ -347,8 +352,8 @@ async def cmd_models(args):
 async def cmd_tools(args):
     """List registered tools."""
     try:
-        from tools.registry import get_registry
-        registry = get_registry()
+        from tools.registry_v2 import ToolRegistry
+        registry = ToolRegistry()
         all_tools = registry.get_all()
         
         table = Table(title="Registered Tools")

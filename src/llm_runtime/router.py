@@ -1,4 +1,4 @@
-"""
+﻿"""
 LLM Router
 ===========
 Ranking-based model selection. Picks the cheapest available model
@@ -18,14 +18,14 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from ..config import get_settings
-from .budget import BudgetTracker, get_budget_tracker
-from .cache import ResponseCache, get_cache
-from .providers.base import AIProvider, AIResponse
-from .providers.openai_provider import OpenAIProvider
-from .providers.anthropic_provider import AnthropicProvider
-from .providers.gemini_provider import GeminiProvider
-from .providers.ollama_provider import OllamaProvider
+from config import get_config as get_settings
+from llm_runtime.budget import BudgetTracker, get_budget_tracker
+from llm_runtime.cache import ResponseCache, get_cache
+from providers.base import AIProvider, AIResponse
+from providers.openai_provider import OpenAIProvider
+from providers.anthropic_provider import AnthropicProvider
+from providers.gemini_provider import GeminiProvider
+from providers.ollama_provider import OllamaProvider
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ class LLMRouter:
     def __init__(self):
         self._ranking = _load_ranking()
         self._providers: Dict[str, AIProvider] = {}
-        self._module_overrides: Dict[str, str] = {}  # module_name → model
+        self._module_overrides: Dict[str, str] = {}  # module_name â†’ model
         self._budget = get_budget_tracker()
         self._cache = get_cache()
         self._initialized = False
@@ -68,35 +68,45 @@ class LLMRouter:
         """Lazy-init providers from settings."""
         if self._initialized:
             return
+        import os
         settings = get_settings()
         llm = settings.llm
 
-        if llm.openai_api_key:
+        # Read API keys from environment (works with both config styles)
+        openai_key = getattr(llm, 'openai_api_key', None) or os.environ.get('OPENAI_API_KEY')
+        anthropic_key = getattr(llm, 'anthropic_api_key', None) or os.environ.get('ANTHROPIC_API_KEY')
+        google_key = getattr(llm, 'google_api_key', None) or os.environ.get('GOOGLE_API_KEY')
+        ollama_host = getattr(llm, 'ollama_host', None) or os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
+
+        if openai_key:
             self._providers["openai"] = OpenAIProvider(
-                api_key=llm.openai_api_key,
-                model="gpt-4o-mini",  # default; overridden per-call
+                api_key=openai_key,
+                model=getattr(llm, 'openai_model', 'gpt-4o-mini'),
             )
             logger.info("OpenAI provider registered")
 
-        if llm.anthropic_api_key:
+        if anthropic_key:
             self._providers["anthropic"] = AnthropicProvider(
-                api_key=llm.anthropic_api_key,
-                model="claude-sonnet-4-20250514",
+                api_key=anthropic_key,
+                model=getattr(llm, 'anthropic_model', 'claude-sonnet-4-20250514'),
             )
             logger.info("Anthropic provider registered")
 
-        if llm.google_api_key:
+        if google_key:
             self._providers["gemini"] = GeminiProvider(
-                api_key=llm.google_api_key,
-                model="gemini-2.0-flash",
+                api_key=google_key,
+                model=getattr(llm, 'google_model', 'gemini-2.0-flash'),
             )
             logger.info("Gemini provider registered")
 
         # Ollama is always "available" if running
         self._providers["ollama"] = OllamaProvider(
-            host=llm.ollama_host,
-            model="llama3.2",
+            host=ollama_host,
+            model=getattr(llm, 'ollama_model', 'llama3.2'),
         )
+
+        if not self._providers:
+            logger.warning("No LLM providers configured. Set API keys in .env or environment.")
 
         self._initialized = True
 
@@ -338,16 +348,21 @@ class LLMRouter:
 
     def _create_provider_for_model(self, provider_name: str, model: str) -> AIProvider:
         """Create a new provider instance for a specific model."""
+        import os
         settings = get_settings()
         llm = settings.llm
         if provider_name == "openai":
-            return OpenAIProvider(api_key=llm.openai_api_key, model=model)
+            key = getattr(llm, 'openai_api_key', None) or os.environ.get('OPENAI_API_KEY')
+            return OpenAIProvider(api_key=key, model=model)
         elif provider_name == "anthropic":
-            return AnthropicProvider(api_key=llm.anthropic_api_key, model=model)
+            key = getattr(llm, 'anthropic_api_key', None) or os.environ.get('ANTHROPIC_API_KEY')
+            return AnthropicProvider(api_key=key, model=model)
         elif provider_name == "gemini":
-            return GeminiProvider(api_key=llm.google_api_key, model=model)
+            key = getattr(llm, 'google_api_key', None) or os.environ.get('GOOGLE_API_KEY')
+            return GeminiProvider(api_key=key, model=model)
         elif provider_name == "ollama":
-            return OllamaProvider(host=llm.ollama_host, model=model)
+            host = getattr(llm, 'ollama_host', None) or os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
+            return OllamaProvider(host=host, model=model)
         raise ValueError(f"Unknown provider: {provider_name}")
 
     @staticmethod
@@ -372,3 +387,4 @@ def get_router() -> LLMRouter:
     if _router is None:
         _router = LLMRouter()
     return _router
+

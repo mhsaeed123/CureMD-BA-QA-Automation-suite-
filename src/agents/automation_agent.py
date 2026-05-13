@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-from .base_agent import BaseAgent, AgentStatus
+from agents.base_agent import BaseAgent, AgentStatus
 
 
 class WorkflowStatus(Enum):

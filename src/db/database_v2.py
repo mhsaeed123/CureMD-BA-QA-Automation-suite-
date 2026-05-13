@@ -8,7 +8,7 @@ from sqlmodel import SQLModel, create_engine, Session
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from typing import AsyncGenerator
 
-from ..config import get_settings
+from config import get_settings
 
 
 def get_sync_engine():

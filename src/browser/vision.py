@@ -11,7 +11,7 @@ Features:
 from typing import Optional, Tuple
 from pathlib import Path
 
-from ..logging import get_logger
+from app_logging import get_logger
 
 logger = get_logger("browser.vision")
 

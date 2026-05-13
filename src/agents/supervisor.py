@@ -11,7 +11,7 @@ Features:
 
 import asyncio
 from typing import Any, Dict, List, Optional, Type
-from .base import Agent, AgentConfig, AgentState
+from agents.base import Agent, AgentConfig, AgentState
 
 class SupervisorAgent(Agent):
     """

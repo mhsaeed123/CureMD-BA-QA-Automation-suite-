@@ -10,8 +10,16 @@ Features:
 """
 
 from typing import Any, Dict, List, Optional, Tuple
-from .base import Agent, AgentConfig
-from ..logging import get_logger, trace
+from agents.base import Agent, AgentConfig
+from app_logging import get_logger
+# Compatibility shim for missing trace/TaskLogger
+def trace(*args, **kwargs):
+    def decorator(func): return func
+    if args and callable(args[0]): return args[0]
+    return decorator
+
+class TaskLogger: pass
+
 
 logger = get_logger("agents.browser")
 

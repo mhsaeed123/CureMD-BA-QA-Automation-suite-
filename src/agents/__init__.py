@@ -7,9 +7,9 @@ Author: CureMD BA QA Team
 Version: 1.0.0
 """
 
-from .base_agent import BaseAgent, AgentStatus
-from .qa_agent import QAAgent, TestResult
-from .automation_agent import AutomationAgent, WorkflowStep
+from agents.base_agent import BaseAgent, AgentStatus
+from agents.qa_agent import QAAgent, TestResult
+from agents.automation_agent import AutomationAgent, WorkflowStep
 
 __all__ = [
     'BaseAgent',

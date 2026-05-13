@@ -67,9 +67,9 @@ class AIProviderFactory:
         return list(cls._providers.keys())
 
 # Register built-in providers
-from .openai_provider import OpenAIProvider
-from .anthropic_provider import AnthropicProvider
-from .ollama_provider import OllamaProvider
+from providers.openai_provider import OpenAIProvider
+from providers.anthropic_provider import AnthropicProvider
+from providers.ollama_provider import OllamaProvider
 
 AIProviderFactory.register("openai", OpenAIProvider)
 AIProviderFactory.register("anthropic", AnthropicProvider)

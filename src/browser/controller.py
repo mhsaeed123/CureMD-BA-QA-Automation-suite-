@@ -18,7 +18,20 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from ..logging import get_logger, trace, TaskLogger
+from app_logging import get_logger
+
+# Compatibility shim for missing trace/TaskLogger
+def trace(*args, **kwargs):
+    """No-op trace decorator."""
+    def decorator(func):
+        return func
+    if args and callable(args[0]):
+        return args[0]
+    return decorator
+
+class TaskLogger:
+    """Compatibility shim."""
+    pass
 
 logger = get_logger("browser.controller")
 

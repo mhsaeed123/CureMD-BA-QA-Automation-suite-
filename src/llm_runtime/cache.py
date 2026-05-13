@@ -11,7 +11,7 @@ import sqlite3
 from pathlib import Path
 from typing import Optional
 
-from .providers.base import AIResponse
+from providers.base import AIResponse
 
 logger = logging.getLogger(__name__)
 

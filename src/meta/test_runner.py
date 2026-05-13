@@ -61,7 +61,7 @@ class TestRunner:
         Generate a basic test file for a module.
         Uses the LLM to write tests based on the code.
         """
-        from ..llm.router import get_router
+        from llm_runtime.router import get_router
         router = get_router()
 
         response = await router.ask(
