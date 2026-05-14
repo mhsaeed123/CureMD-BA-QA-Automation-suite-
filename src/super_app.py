@@ -20,10 +20,16 @@ from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 # Import config
-from config import (
-    get_config, APP_NAME, APP_VERSION, APP_DESCRIPTION,
-    LLMProvider, LLMConfig, AgentConfig, BrowserConfig
-)
+try:
+    from config import (
+        get_config, APP_NAME, APP_VERSION, APP_DESCRIPTION,
+        LLMProvider, LLMConfig, AgentConfig, BrowserConfig
+    )
+except ImportError:
+    from src.config import (
+        get_config, APP_NAME, APP_VERSION, APP_DESCRIPTION,
+        LLMProvider, LLMConfig, AgentConfig, BrowserConfig
+    )
 
 console = Console()
 
